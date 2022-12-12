@@ -6,8 +6,8 @@ RSpec.describe MovieFacade do
   describe 'instance methods' do
     describe '#top_rated' do
       it 'returns the top rated movis', :vcr do
-        expect(described_class.new(550).top_rated[0].title).to eq('20th Century Girl')
-        expect(described_class.new(550).top_rated[1].title).to eq('The Godfather')
+        expect(described_class.new(550).top_rated[0].title).to eq("The Godfather")
+        expect(described_class.new(550).top_rated[1].title).to eq("The Shawshank Redemption")
       end
     end
 

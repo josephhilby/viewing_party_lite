@@ -16,6 +16,4 @@ User Review:
     [] The code will run locally
     [] My code has no unused/commented out code
 
-Please Include a link to a [gif](https://giphy.com/) of your feelings about this branch
-
-Link:
+Please Include a gif showing your feelings about this branch
