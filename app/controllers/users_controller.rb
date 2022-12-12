@@ -22,6 +22,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def login_form; end
+
+  def login
+    user = User.find_by(email: params[:email])
+    if user && user.authenticate(params[:password])
+      session[:user_id] == user.id
+      flash[:success] = "Welcome, #{user.email}"
+      redirect_to user_path(user)
+    else
+      flash[:error] = "Unknown username or password"
+      render :login_form
+    end
+  end
+
   private
 
   def find_user
@@ -29,6 +43,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.permit(:name, :email)
+    params.permit(:name, :email, :password, :password_confirmation)
   end
 end

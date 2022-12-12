@@ -22,6 +22,12 @@ RSpec.describe 'The Welcome Page', type: :feature do
       expect(page).to have_current_path(register_path, ignore_query: true)
     end
 
+    it 'I see a button to Log In' do
+      click_button 'Log In'
+
+      expect(page).to have_current_path(login_path, ignore_query: true)
+    end
+
     it 'I see a list of existing users which links to the users dashboard' do
       within '#existing_users' do
         expect(page).to have_content(user_1.email)
