@@ -13,6 +13,12 @@
         <%= f.label :email %>
         <%= f.email_field :email %><br><br>
 
+        <%= f.label :password %>
+        <%= f.password_field :password %><br><br>
+
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %><br><br>
+
         <%= f.submit "Create New User", class: 'button1' %>
       <% end %>
     </div>
