@@ -95,5 +95,47 @@ RSpec.describe 'The Register Page', type: :feature do
       expect(page).to have_current_path(register_path, ignore_query: true)
       expect(page).to have_content("Password confirmation doesn't match Password")
     end
+
+    it 'returns an error message if password and password confirmation field is blank' do
+      within '#register-form' do
+        fill_in :name, with: 'Bob'
+        fill_in :email, with: 'bob@gmail.com'
+        fill_in :password, with: ''
+        fill_in :password_confirmation, with: ''
+
+        click_button 'Create New User'
+      end
+
+      expect(page).to have_current_path(register_path, ignore_query: true)
+      expect(page).to have_content("Password can't be blank")
+    end
+
+    it 'returns an error message if password confirmation field is different from password' do
+      within '#register-form' do
+        fill_in :name, with: 'Bob'
+        fill_in :email, with: 'bob@gmail.com'
+        fill_in :password, with: 'test123'
+        fill_in :password_confirmation, with: 'not the same'
+
+        click_button 'Create New User'
+      end
+
+      expect(page).to have_current_path(register_path, ignore_query: true)
+      expect(page).to have_content("Password confirmation doesn't match Password")
+    end
+
+    it 'returns an error message if password confirmation field is different from password' do
+      within '#register-form' do
+        fill_in :name, with: 'Bob'
+        fill_in :email, with: 'bob@gmail.com'
+        fill_in :password, with: 'not the same'
+        fill_in :password_confirmation, with: 'test123'
+
+        click_button 'Create New User'
+      end
+
+      expect(page).to have_current_path(register_path, ignore_query: true)
+      expect(page).to have_content("Password confirmation doesn't match Password")
+    end
   end
 end
