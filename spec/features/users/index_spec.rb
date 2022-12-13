@@ -2,10 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe 'the Discover Movies Page', type: :feature do
+RSpec.describe 'The Discover Movies Page', type: :feature do
   let!(:user_1) { create(:user) }
 
   before do
+    visit login_path
+    fill_in :email, with: user_1.email
+    fill_in :password, with: user_1.password
+    click_button 'Log In'
     visit "/users/#{user_1.id}/discover"
   end
 

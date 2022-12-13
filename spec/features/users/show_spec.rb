@@ -11,6 +11,10 @@ RSpec.describe 'The User Show Page', type: :feature do
 
   before do
     VCR.insert_cassette 'image url'
+    visit login_path
+    fill_in :email, with: user_1.email
+    fill_in :password, with: user_1.password
+    click_button 'Log In'
     visit user_path(user_1)
   end
 

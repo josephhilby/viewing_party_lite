@@ -7,6 +7,10 @@ RSpec.describe 'The Movie Show Page', type: :feature do
 
   before do
     VCR.insert_cassette 'movie_show'
+    visit login_path
+    fill_in :email, with: user_1.email
+    fill_in :password, with: user_1.password
+    click_button 'Log In'
     visit user_movie_path(user_1, 550)
   end
 
@@ -57,7 +61,7 @@ RSpec.describe 'The Movie Show Page', type: :feature do
       end
 
       it 'Count of reviews' do
-        expect(page).to have_content('7 Reviews:')
+        expect(page).to have_content('8 Reviews:')
       end
 
       it 'Each reviews author and info' do

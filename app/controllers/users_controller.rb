@@ -2,6 +2,7 @@
 
 class UsersController < ApplicationController
   before_action :find_user, only: %i[discover show]
+  skip_before_action :current_user, only: [:new, :create, :login, :login_form]
 
   def discover; end
 
@@ -15,6 +16,8 @@ class UsersController < ApplicationController
     new_user = User.new(user_params)
 
     if new_user.save
+      session[:user_id] = new_user.id
+      flash[:success] = "Welcome, #{new_user.email}"
       redirect_to user_path(new_user)
     else
       redirect_to register_path
@@ -27,13 +30,22 @@ class UsersController < ApplicationController
   def login
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
-      session[:user_id] == user.id
-      flash[:success] = "Welcome, #{user.email}"
-      redirect_to user_path(user)
+      if user.admin?
+        flash[:success] = "Welcome, Administrator #{user.email}"
+      elsif user.default?
+        session[:user_id] = user.id
+        flash[:success] = "Welcome, #{user.email}"
+        redirect_to user_path(user)
+      end
     else
       flash[:error] = "Unknown username or password"
       render :login_form
     end
+  end
+
+  def logout
+    reset_session
+    redirect_to root_path
   end
 
   private
