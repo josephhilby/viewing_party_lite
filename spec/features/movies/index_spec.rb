@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'the Movies Index Page', type: :feature do
+RSpec.describe 'The Movies Index Page', type: :feature do
   let!(:user_1) { create(:user) }
   let!(:movie_1) do
     Movie.new(id: 238, title: 'The Godfather', vote_average: 8.7, overview: 'spanning the years of...', runtime: 175,
@@ -11,6 +11,10 @@ RSpec.describe 'the Movies Index Page', type: :feature do
 
   before do
     VCR.insert_cassette 'top rated'
+    visit login_path
+    fill_in :email, with: user_1.email
+    fill_in :password, with: user_1.password
+    click_button 'Log In'
     visit "/users/#{user_1.id}/discover"
     click_button 'Find Top Rated Movies'
   end

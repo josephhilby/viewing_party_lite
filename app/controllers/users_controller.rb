@@ -2,6 +2,7 @@
 
 class UsersController < ApplicationController
   before_action :find_user, only: %i[discover show]
+  skip_before_action :current_user, only: [:new, :create, :login, :login_form]
 
   def discover; end
 

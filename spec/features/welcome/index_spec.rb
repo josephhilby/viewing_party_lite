@@ -16,6 +16,12 @@ RSpec.describe 'The Welcome Page', type: :feature do
       expect(page).to have_content('Viewing Party')
     end
 
+    it 'I see a link to go back to the landing page' do
+      click_link 'Home'
+
+      expect(page).to have_current_path(root_path, ignore_query: true)
+    end
+
     context 'when I am not logged in' do
       it 'I see a button to "Create a New User"' do
         within '#new_user_button' do
@@ -34,16 +40,27 @@ RSpec.describe 'The Welcome Page', type: :feature do
           expect(page).to have_current_path(login_path, ignore_query: true)
         end
       end
+
+      it 'I dont see a list of existing users' do
+        within '#existing_users' do
+          expect(page).to_not have_content(user_1.email)
+          expect(page).to_not have_content(user_2.email)
+          expect(page).to_not have_content(user_3.email)
+        end
+      end
     end
 
     context 'when I am logged in' do
-      it 'I see a button to "Log Out"' do
+      before(:each) do
         visit login_path
         fill_in :email, with: user_1.email
         fill_in :password, with: user_1.password
         click_button 'Log In'
 
         visit root_path
+      end
+
+      it 'I see a button to "Log Out"' do
         within '#new_user_button' do
 
           expect(page).to_not have_button('Log In')
@@ -56,24 +73,14 @@ RSpec.describe 'The Welcome Page', type: :feature do
         expect(page).to have_button('Log In')
         expect(page).to have_button('Create a New User')
       end
-    end
 
-    it 'I see a list of existing users which links to the users dashboard' do
-      within '#existing_users' do
-        expect(page).to have_content(user_1.email)
-        expect(page).to have_content(user_2.email)
-        expect(page).to have_content(user_3.email)
-
-        click_link user_1.email
+      it 'I see a list of existing users' do
+        within '#existing_users' do
+          expect(page).to have_content(user_1.email)
+          expect(page).to have_content(user_2.email)
+          expect(page).to have_content(user_3.email)
+        end
       end
-
-      expect(page).to have_current_path(user_path(user_1), ignore_query: true)
-    end
-
-    it 'I see a link to go back to the landing page' do
-      click_link 'Home'
-
-      expect(page).to have_current_path(root_path, ignore_query: true)
     end
   end
 end

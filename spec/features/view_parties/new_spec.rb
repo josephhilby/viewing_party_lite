@@ -15,6 +15,10 @@ RSpec.describe 'New View Party Page', type: :feature do
     VCR.insert_cassette 'view party'
     VCR.insert_cassette 'movie show'
     VCR.insert_cassette 'image url'
+    visit login_path
+    fill_in :email, with: user_1.email
+    fill_in :password, with: user_1.password
+    click_button 'Log In'
     visit new_user_movie_view_party_path(user_1, movie_1.id)
   end
 
