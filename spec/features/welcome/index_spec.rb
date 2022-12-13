@@ -16,16 +16,46 @@ RSpec.describe 'The Welcome Page', type: :feature do
       expect(page).to have_content('Viewing Party')
     end
 
-    it 'I see a button to create a new user' do
-      click_button 'Create a New User'
+    context 'when I am not logged in' do
+      it 'I see a button to "Create a New User"' do
+        within '#new_user_button' do
+          expect(page).to_not have_button('Log Out')
+          click_button 'Create a New User'
 
-      expect(page).to have_current_path(register_path, ignore_query: true)
+          expect(page).to have_current_path(register_path, ignore_query: true)
+        end
+      end
+
+      it 'I see a button to "Log In"' do
+        within '#new_user_button' do
+          expect(page).to_not have_button('Log Out')
+          click_button 'Log In'
+
+          expect(page).to have_current_path(login_path, ignore_query: true)
+        end
+      end
     end
 
-    it 'I see a button to Log In' do
-      click_button 'Log In'
+    context 'when I am logged in' do
+      it 'I see a button to "Log Out"' do
+        visit login_path
+        fill_in :email, with: user_1.email
+        fill_in :password, with: user_1.password
+        click_button 'Log In'
 
-      expect(page).to have_current_path(login_path, ignore_query: true)
+        visit root_path
+        within '#new_user_button' do
+
+          expect(page).to_not have_button('Log In')
+          expect(page).to_not have_button('Create a New User')
+
+          click_button 'Log Out'
+
+          expect(page).to have_current_path(root_path, ignore_query: true)
+        end
+        expect(page).to have_button('Log In')
+        expect(page).to have_button('Create a New User')
+      end
     end
 
     it 'I see a list of existing users which links to the users dashboard' do
